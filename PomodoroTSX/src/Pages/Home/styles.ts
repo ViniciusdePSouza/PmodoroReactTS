@@ -53,5 +53,65 @@ export const Separator = styled.div`
     width: 6.4rem;
     overflow: hidden;
     display: flex;
-    justify-content: center
+    justify-content: center;
+`
+
+export const TimerButton = styled.button`
+    width: 100%;
+
+    border: 0; 
+    padding: 1.6rem;
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: .8rem;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    background-color: ${(props) => props.theme['green-500']};
+    color: ${(props) => props.theme['gray-100']};
+
+    &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    &:not(:disabled):hover {
+        background-color: ${(props) => props.theme['green-700']};
+    }
+`
+
+const BaseInput = styled.input`
+    background: transparent;
+    height: 4rem;
+
+    border: 0;
+    border-bottom: 2px solid ${(props) => props.theme['gray-500']};
+
+    font-weight: bold;
+    font-size: 1.8rem;
+    color: ${(props) => props.theme['gray-100']};
+
+    padding: 0 0.8rem;
+
+    &:focus{
+        box-shadow: none;
+        border-color: ${(props) => props.theme['green-500']}
+    }
+`
+
+export const TaskInput = styled(BaseInput)`
+    flex: 1;
+
+    &::-webkit-calender-picker-indicator{
+        display: none !important;
+    }
+`
+
+export const MinutesInput = styled(BaseInput)`
+    width: 6.4rem;
 `

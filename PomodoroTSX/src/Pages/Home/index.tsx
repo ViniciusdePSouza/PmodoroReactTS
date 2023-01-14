@@ -1,13 +1,33 @@
 import { Play } from "phosphor-react";
 import { FormContainer, HomeContainer, MinutesInput, Separator, TaskInput, TimerButton, TimerContainer } from "./styles";
 
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as zod from 'zod'
+
 export function Home() {
+    const NewCycleFormValidationSchema = zod.object({
+        task: zod.string().min(1, 'Por favor, informe a tarefa'),
+        howlong: zod.number().min(5).max(60),
+    })
+
+    const { register, handleSubmit, watch } = useForm({
+        resolver: zodResolver(NewCycleFormValidationSchema)
+    })
+
+    function handleCreateNewCycle(data: any) {
+        console.log(data)
+    }
+
+    const task = watch('task')
+    let isSubmitDisabled = !task
+
     return (
         <HomeContainer>
-            <form action="">
+            <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
                 <FormContainer>
                     <label htmlFor="task">Vou trabalhar em</label>
-                    <TaskInput type="text" id="task" list='task-suggestions' placeholder="Dê um nome para o seu projeto" />
+                    <TaskInput type="text" id="task" list='task-suggestions' placeholder="Dê um nome para o seu projeto" {...register('task')}/>
 
                     <datalist id='task-suggestions'>
                         <option value="Projeto 1"/>
@@ -15,8 +35,8 @@ export function Home() {
                         <option value="Projeto 3"/>
                     </datalist>
 
-                    <label htmlFor="how-long">durante</label>
-                    <MinutesInput type="number" id="how-long" placeholder="00" step={5} min={5} max={60}/>
+                    <label htmlFor="howlong">durante</label>
+                    <MinutesInput type="number" id="howlong" placeholder="00" step={5} min={5} max={60} {...register('minutes', { valueAsNumber: true })}/>
 
                     <span>minutos.</span>
                 </FormContainer>
@@ -28,7 +48,7 @@ export function Home() {
                     <span>0</span>
                 </TimerContainer>
 
-                <TimerButton type="submit">
+                <TimerButton type="submit" disabled={isSubmitDisabled}>
                     <Play size={24}/>
                     Começar
                 </TimerButton>

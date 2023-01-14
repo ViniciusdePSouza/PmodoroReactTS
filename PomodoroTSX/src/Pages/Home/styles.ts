@@ -69,6 +69,7 @@ export const TimerButton = styled.button`
 
     gap: .8rem;
     font-weight: bold;
+    font-size: 1.6rem;
 
     cursor: pointer;
 

@@ -6,14 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
 
 export function Home() {
-    const NewCycleFormValidationSchema = zod.object({
-        task: zod.string().min(1, 'Por favor, informe a tarefa'),
-        howlong: zod.number().min(5).max(60),
-    })
 
-    const { register, handleSubmit, watch } = useForm({
-        resolver: zodResolver(NewCycleFormValidationSchema)
-    })
+    const { register, handleSubmit, watch } = useForm({})
 
     function handleCreateNewCycle(data: any) {
         console.log(data)
@@ -35,8 +29,8 @@ export function Home() {
                         <option value="Projeto 3"/>
                     </datalist>
 
-                    <label htmlFor="howlong">durante</label>
-                    <MinutesInput type="number" id="howlong" placeholder="00" step={5} min={5} max={60} {...register('minutes', { valueAsNumber: true })}/>
+                    <label htmlFor="minutesAmount">durante</label>
+                    <MinutesInput type="number" id="minutesAmount" placeholder="00" step={5} min={5} max={60} {...register('minutes', { valueAsNumber: true })}/>
 
                     <span>minutos.</span>
                 </FormContainer>

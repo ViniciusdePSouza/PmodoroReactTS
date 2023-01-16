@@ -19,6 +19,7 @@ interface Cycle {
     minutesAmount: number
     startDate: Date
     interruptedDate?: Date
+    finishedDate?: Date
 }
 
 export function Home() {
@@ -68,13 +69,14 @@ export function Home() {
     let isSubmitDisabled = !task
 
     function handleInterruptCycle() {
-        setCycles(cycles.map((cycle) => {
-            if(cycle.id === activeCycleId) {
-                return { ...cycle, interruptedDate: new Date()}
-            } else  {
-                return cycle
-            }
-        }))
+        setCycles((state) =>
+            state.map((cycle) => {
+                if (cycle.id === activeCycleId) {
+                    return { ...cycle, interruptedDate: new Date() }
+                } else {
+                    return cycle
+                }
+            }))
 
         setActiveCycleId(null)
     }
@@ -83,15 +85,30 @@ export function Home() {
         let interval: number
 
         if (activeCycle) {
+
             interval = setInterval(() => {
-                setAmountSecondsPassed(differenceInSeconds(new Date(), activeCycle.startDate))
+                const secondsDiff = differenceInSeconds(new Date(), activeCycle.startDate)
+                if (secondsDiff >= totalSeconds) {
+                    setCycles((state) =>
+                        state.map((cycle) => {
+                            if (cycle.id === activeCycleId) {
+                                return { ...cycle, finishedDate: new Date() }
+                            } else {
+                                return cycle
+                            }
+                        }))
+                    setAmountSecondsPassed(totalSeconds)
+                    clearInterval(interval)
+                } else {
+                    setAmountSecondsPassed(secondsDiff)
+                }
             }, 1000)
         }
 
         return (() => {
             clearInterval(interval)
         })
-    }, [activeCycle])
+    }, [activeCycle, totalSeconds])
 
     useEffect(() => {
         if (activeCycle) {
@@ -103,7 +120,7 @@ export function Home() {
             <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
                 <FormContainer>
                     <label htmlFor="task">Vou trabalhar em</label>
-                    <TaskInput type="text" id="task" list='task-suggestions' placeholder="Dê um nome para o seu projeto" {...register('task')} disabled={!!activeCycle}/>
+                    <TaskInput type="text" id="task" list='task-suggestions' placeholder="Dê um nome para o seu projeto" {...register('task')} disabled={!!activeCycle} />
 
                     <datalist id='task-suggestions'>
                         <option value="Projeto 1" />
@@ -112,7 +129,7 @@ export function Home() {
                     </datalist>
 
                     <label htmlFor="minutesAmount">durante</label>
-                    <MinutesInput type="number" id="minutesAmount" placeholder="00" step={5} min={5} max={60} {...register('minutesAmount', { valueAsNumber: true })} disabled={!!activeCycle}/>
+                    <MinutesInput type="number" id="minutesAmount" placeholder="00" step={5} min={5} max={60} {...register('minutesAmount', { valueAsNumber: true })} disabled={!!activeCycle} />
 
                     <span>minutos.</span>
                 </FormContainer>

@@ -49,14 +49,14 @@ export const TimerContainer = styled.div`
 export const Separator = styled.div`
     padding: 3.2rem 0;
     color: ${(props) => props.theme['green-500']};
-
+    
     width: 6.4rem;
     overflow: hidden;
     display: flex;
     justify-content: center;
-`
+    `
 
-export const TimerButton = styled.button`
+export const BaseTimerButton = styled.button`
     width: 100%;
 
     border: 0; 
@@ -70,19 +70,13 @@ export const TimerButton = styled.button`
     gap: .8rem;
     font-weight: bold;
     font-size: 1.6rem;
-
-    cursor: pointer;
-
-    background-color: ${(props) => props.theme['green-500']};
     color: ${(props) => props.theme['gray-100']};
 
+    cursor: pointer;
+    
     &:disabled {
         opacity: 0.7;
         cursor: not-allowed;
-    }
-
-    &:not(:disabled):hover {
-        background-color: ${(props) => props.theme['green-700']};
     }
 `
 
@@ -115,4 +109,19 @@ export const TaskInput = styled(BaseInput)`
 
 export const MinutesInput = styled(BaseInput)`
     width: 6.4rem;
+`
+
+export const StartCountDownButton = styled(BaseTimerButton)`   
+    background-color: ${(props) => props.theme['green-500']};
+    
+    &:not(:disabled):hover {
+        background-color: ${(props) => props.theme['green-700']};
+    }
+`
+export const StopCountDownButton = styled(BaseTimerButton)`
+    background-color: ${(props) => props.theme['red-500']};
+    
+    &:not(:disabled):hover {
+        background-color: ${(props) => props.theme['red-700']};
+    }
 `

@@ -9,12 +9,13 @@ interface Cycle {
     finishedDate?: Date
 }
 
-interface CreateCycleData{
+interface CreateCycleData {
     task: string
     minutesAmount: number
 }
 
 interface CyclesContextType {
+    cycles: Cycle[]
     activeCycle: Cycle | undefined
     activeCycleId: string | null
     amountSecondsPassed: number
@@ -30,7 +31,7 @@ interface CyclesContextProviderProps {
 
 export const CyclesContext = createContext({} as CyclesContextType)
 
-export function CyclesContextProvider({ children, }: CyclesContextProviderProps ) {
+export function CyclesContextProvider({ children, }: CyclesContextProviderProps) {
 
     const [cycles, setCycles] = useState<Cycle[]>([])
     const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
@@ -38,7 +39,7 @@ export function CyclesContextProvider({ children, }: CyclesContextProviderProps 
 
     const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
-    
+
     function setAmountSecondsPassedMOCK(seconds: number) {
         setAmountSecondsPassed(seconds)
     }
@@ -67,7 +68,7 @@ export function CyclesContextProvider({ children, }: CyclesContextProviderProps 
             }))
     }
 
-    
+
 
     function createNewCycle(data: CreateCycleData) {
         const id = String(new Date().getTime())
@@ -98,16 +99,19 @@ export function CyclesContextProvider({ children, }: CyclesContextProviderProps 
         setActiveCycleId(null)
     }
 
-    return(
-        <CyclesContext.Provider 
-        value={{ activeCycle,
-         activeCycleId, 
-         markCurrentFunctionAsFinished, 
-         amountSecondsPassed, 
-         setAmountSecondsPassedMOCK, 
-         createNewCycle,
-         interruptCurrentCycle}}>
-            { children }
+    return (
+        <CyclesContext.Provider
+            value={{
+                cycles,
+                activeCycle,
+                activeCycleId,
+                markCurrentFunctionAsFinished,
+                amountSecondsPassed,
+                setAmountSecondsPassedMOCK,
+                createNewCycle,
+                interruptCurrentCycle
+            }}>
+            {children}
         </CyclesContext.Provider >
     )
 }
